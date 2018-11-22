@@ -87,7 +87,7 @@ Experiment: make sure the token/unseal keys don't persist:
 `cat /tmp/jelly.out`
 
 
-:thumbsup
+:fist:
 
 
 [vault-on-gke]:https://github.com/sethvargo/vault-on-gke
