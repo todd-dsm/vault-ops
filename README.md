@@ -71,6 +71,7 @@ The `make unseal` fails; we'll fix this in post. If you know how, please feel fr
 # Experimentation
 At this point Vault is up and running in Kubernetes and you are proxied out to the environment; [learn] and experiment. 
 
+---
 
 Clean-up
 
