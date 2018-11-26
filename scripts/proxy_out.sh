@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#  PURPOSE: auto-initialize and unseal vault
+#  PURPOSE: proxy out to kubernetes
 # -----------------------------------------------------------------------------
 #  PREREQS: a)
 #           b)
@@ -7,7 +7,7 @@
 # -----------------------------------------------------------------------------
 #  EXECUTE:
 # -----------------------------------------------------------------------------
-#     TODO: 1) Fix expansion of 'example'
+#     TODO: 1)
 #           2)
 #           3)
 # -----------------------------------------------------------------------------
@@ -21,50 +21,25 @@ set -x
 ### VARIABLES
 ###----------------------------------------------------------------------------
 # ENV Stuff
-
-# Data Files
-theJelly='/tmp/jelly.out'
+releaseName="$1"
 
 
 ###----------------------------------------------------------------------------
 ### FUNCTIONS
 ###----------------------------------------------------------------------------
-### Export the Root Token
-###---
-function getToken() {
-    export ROOT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
-    export UNSEAL_KEY="$(grep 'Unseal Key 1' "$theJelly" | awk '{print $4}')"
 
-}
 
 ###----------------------------------------------------------------------------
 ### MAIN PROGRAM
 ###----------------------------------------------------------------------------
-### Initialize
+### Try-catch: Port-forward to the unopened endpoint: myRelease, then
+### later, access the vault by initializing and unsealing
 ###---
-vault operator init  2>&1 | tee "$theJelly"
-
-
-###---
-### Export the Root Token
-###---
-getToken "$theJelly"
-
-
-###---
-### Unseal
-###---
-vault operator unseal "$UNSEAL_KEY"
-
-
-###---
-### REQ
-###---
-
-
-###---
-### REQ
-###---
+{
+    kubectl -n default get vault "$releaseName" \
+        -o jsonpath='{.status.vaultStatus.sealed[0]}' | \
+        xargs -0 -I {} kubectl -n default port-forward {} 8200&
+} > /dev/null
 
 
 ###---

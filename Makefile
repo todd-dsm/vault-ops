@@ -16,6 +16,7 @@ prep:
 # vault: first the CRD, then the Operator
 vault:
 	scripts/inst_vault.sh
+	@scripts/proxy_out.sh $(myRelease)
 
 
 unseal:

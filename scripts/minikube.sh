@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
-# PURPOSE: Start with kubernetes version v1.11.3
+# PURPOSE: Start a version of kubernetes
 
-minikube start --kubernetes-version=v1.11.3
+mkVers='v1.11.3'
+#mkVers='v1.12.3'
+
+minikube start --kubernetes-version="$mkVers"
