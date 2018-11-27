@@ -33,8 +33,6 @@ theJelly='/tmp/jelly.out'
 ###---
 function getToken() {
     export ROOT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
-    export UNSEAL_KEY="$(grep 'Unseal Key 1' "$theJelly" | awk '{print $4}')"
-
 }
 
 ###----------------------------------------------------------------------------
@@ -54,7 +52,10 @@ getToken "$theJelly"
 ###---
 ### Unseal
 ###---
-vault operator unseal "$UNSEAL_KEY"
+printf '%s\n' "Unsealing the Vault..."
+while read -r unsealKey; do
+    vault operator unseal "$unsealKey"
+done <<< "$(awk '1; NR == 3 { exit }' $theJelly | cut -d' ' -f4)"
 
 
 ###---
