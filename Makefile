@@ -25,5 +25,5 @@ unseal:
 
 clean: ## Destroy all in order
 	helm delete --purge $(myRelease) > /dev/null
-	sudo lsof -PiTCP -sTCP:LISTEN | grep 8200 | awk '{print $2}' | \
+	sudo lsof -i :8200 | grep IPv4 | awk '{print $2}' | \
 		head -1 | xargs kill -9 > /dev/null
