@@ -24,14 +24,19 @@ prep:  ## Prepare Kube cluster w/ Helm
 # vault: first the CRD, then the Operator
 vault:  ## install Vault via Helm + setup local proxy for unseal
 	scripts/inst_vault.sh
+
+proxy:
 	@scripts/proxy_out.sh $(myRelease)
 
 
 unseal: ## Unseal Vault
 	exec scripts/open_vault.sh $(myRelease)
 
+expose: 
+	create -f kubes/service_external.yaml
+	kubectl get services tsirung-external -o yaml
 
 clean: ## Destroy all in order
-	helm delete --purge $(myRelease) > /dev/null
-	sudo lsof -PiTCP -sTCP:LISTEN | grep 8200 | awk 'NR==2{print $2}'| \
-		head -1 | xargs kill -9 > /dev/null
+	@helm delete --purge $(myRelease)
+	@sudo lsof -i :8200 | grep IPv4 | awk '{print $2}' | \
+		xargs kill -9
