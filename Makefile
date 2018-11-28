@@ -16,14 +16,19 @@ prep:
 # vault: first the CRD, then the Operator
 vault:
 	scripts/inst_vault.sh
+
+proxy:
 	@scripts/proxy_out.sh $(myRelease)
 
 
 unseal:
 	exec scripts/open_vault.sh $(myRelease)
 
+expose: 
+	create -f kubes/service_external.yaml
+	kubectl get services tsirung-external -o yaml
 
 clean: ## Destroy all in order
 	helm delete --purge $(myRelease) > /dev/null
 	sudo lsof -i :8200 | grep IPv4 | awk '{print $2}' | \
-		head -1 | xargs kill -9 > /dev/null
+		xargs kill -9 > /dev/null

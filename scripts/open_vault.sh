@@ -32,7 +32,8 @@ theJelly='/tmp/jelly.out'
 ### Export the Root Token
 ###---
 function getToken() {
-    export ROOT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
+    export  ROOT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
+    export VAULT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
 }
 
 ###----------------------------------------------------------------------------
