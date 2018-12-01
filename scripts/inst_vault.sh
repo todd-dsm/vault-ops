@@ -45,6 +45,7 @@ apiVersion: "vault.security.coreos.com/v1alpha1"
 kind: "VaultService"
 metadata:
   name: "$myRelease"
+  namespace: vault
 spec:
   nodes: $nodeCount
   version: "$opsVersion"

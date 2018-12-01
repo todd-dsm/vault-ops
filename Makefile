@@ -3,35 +3,49 @@
 # vim: tabstop=8 noexpandtab
 
 # Grab some ENV stuff
-myRelease	?= $(shell $(myRelease))
+vaultRelName	?= $(shell $(vaultRelName))
+opsRelName	?= $(shell $(opsRelName))
 nameSpace	?= $(shell $(nameSpace))
 
 
 # ensure some requirements are met
 prep:  ## Prepare Kube cluster w/ Helm
 	helm init --upgrade
-	echo "source scripts/build.env tsirung"
+	@printf '\n\n%s\n' "SOURCE-IN YOUR ENV VARIABLES; EXAMPLE:"
+	@printf '\n%s\n\n' "  source scripts/build.env vaultRelName"
 
-# vault: first the CRD, then the Operator
+operators: ## deploy the operators
+	scripts/inst_operators.sh
+
 vault:  ## install Vault via Helm 
 	scripts/inst_vault.sh 
 
 proxy:  ## proxy out to the cluster for the unseal
-	@scripts/proxy_out.sh $(myRelease)
+	scripts/proxy_out.sh $(vaultRelName)
 
 
 unseal: ## Unseal Vault
-	exec scripts/open_vault.sh $(myRelease)
+	scripts/open_vault.sh
 
+
+###    CHECK NODEPORT BEFORE THIS STEP
 expose: ## create the NodePort to the service from the outside
-	create -f kubes/service_external.yaml
-	kubectl get services tsirung-external -o yaml
+	@scripts/make_service.sh
+	kubectl create -f kubes/service_external.yaml
+	kubectl -n $(nameSpace) get services $(vaultRelName)-ext -o yaml
+
 
 clean: ## Destroy all in order
-	@helm delete --purge $(myRelease)
-	@sudo lsof -i :8200 | grep IPv4 | awk '{print $2}' | \
+	@kubectl delete -f kubes/service_external.yaml
+	@helm delete --purge $(vaultRelName)
+	@helm delete --purge $(opsRelName)
+	sudo lsof -i :8200 | grep IPv4 | awk '{print $2}' | \
 		xargs kill -9
 
+
+#-----------------------------------------------------------------------------#
+#------------------------   MANAGERIAL OVERHEAD   ----------------------------#
+#-----------------------------------------------------------------------------#
 print-%  : ## Print any variable from the Makefile (e.g. make print-VARIABLE);
 	@echo $* = $($*)
 
