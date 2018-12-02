@@ -2,18 +2,21 @@
 
 For Vault on Google Cloud there's [vault-on-gke]. If you want to do it the hardway there's [vault-on-google-kubernetes-engine]. 
 
-For everything else, there's _this_ - the CoreOS [Vault Operator], backed by the [etcd Operator]. 
+For everything else, there's _this_ - the Banzai Cloud [Vault Operator], backed by the [etcd Operator]. 
 
 For now, the [Helm Charts/Vault-Operator] repo will be the primary reference point for use and further instruction.
 
 ## Limitations
 
-This deployment won't go past Vault `v0.9.1-0` for [some time].
+This deployment crashes Minikube but before it does, Vault `v0.11.0` is installed. It has every appearance of being capable of going to the latest version.
 
 
 ## The Steps
 
-`git@github.com:todd-dsm/vault-ops.git && cd vault-ops`
+```
+git@github.com:todd-dsm/vault-ops.git && cd vault-ops
+git checkout banzai
+```
 
 Check the version in `scripts/minikube.sh` and change it to whatever meets your requirements. Then run it to bootstrap `minikube`.
 
@@ -98,10 +101,8 @@ Experiment: make sure the token/unseal keys don't persist:
 
 [vault-on-gke]:https://github.com/sethvargo/vault-on-gke
 [vault-on-google-kubernetes-engine]:https://github.com/kelseyhightower/vault-on-google-kubernetes-engine
-[Vault Operator]:https://coreos.com/blog/introducing-vault-operator-project
+[Vault Operator]:https://github.com/banzaicloud/bank-vaults
 [etcd Operator]:https://coreos.com/blog/introducing-the-etcd-operator.html
-[Helm Charts/Vault-Operator]:https://github.com/helm/charts/tree/master/stable/vault-operator
+[Helm Charts/Vault-Operator]:https://github.com/banzaicloud/bank-vaults#helm-chart
 [some time]:https://github.com/coreos/vault-operator/issues/332#issue-335529485
 [learn]:https://learn.hashicorp.com/vault/getting-started/first-secret
-
-
