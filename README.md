@@ -23,16 +23,16 @@ $HELM_HOME has been configured at /Users/thomas/.helm.
 
 Tiller (the Helm server-side component) has been upgraded to the current version.
 Happy Helming!
-echo "source scripts/build.env tsirung"
-source scripts/build.env tsirung           <- Instructions
+echo "source scripts/build.env auth"
+source scripts/build.env auth           <- Instructions
 ```
 
-Subequent scripts need the variables in `scripts/build.env`. The `Makefile` will have them by the time it needs them. I called the _release_ `tsirung`; pass in whatever string you want.
+Subequent scripts need the variables in `scripts/build.env`. The `Makefile` will have them by the time it needs them. I called the _release_ `auth`; pass in whatever string you want.
 
 ```
-$ source scripts/build.env tsirung
-++ export myRelease=tsirung
-++ myRelease=tsirung
+$ source scripts/build.env auth
+++ export myRelease=auth
+++ myRelease=auth
 ++ export KUBE_NS=default
 ++ KUBE_NS=default
 ++ export VAULT_ADDR=https://localhost:8200
@@ -58,7 +58,7 @@ This takes a few minutes. Confirm everything is `STATUS=Running` and wait until 
 
 ```
 NAME                            READY   STATUS    RESTARTS   AGE
-pod/tsirung-74759c657d-522s9    1/2     Running   2          3m
+pod/auth-74759c657d-522s9    1/2     Running   2          3m
 ...
 ```
 
@@ -66,7 +66,7 @@ Unseal the Vault
 
 The `make unseal` fails; we'll fix this in post. If you know how, please feel free. For now, call the script with 1 argument, the _release_ :
 
-`scripts/open_vault.sh tsirung`
+`scripts/open_vault.sh auth`
 
 # Experimentation
 At this point Vault is up and running in Kubernetes and you are proxied out to the environment; [learn] and experiment. 
