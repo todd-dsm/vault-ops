@@ -6,6 +6,11 @@ For everything else, there's _this_ - the CoreOS [Vault Operator], backed by the
 
 For now, the [Helm Charts/Vault-Operator] repo will be the primary reference point for use and further instruction.
 
+## Limitations
+
+This deployment won't go past Vault `v0.9.1-0` for [some time].
+
+
 ## The Steps
 
 `git@github.com:todd-dsm/vault-ops.git && cd vault-ops`
@@ -96,6 +101,7 @@ Experiment: make sure the token/unseal keys don't persist:
 [Vault Operator]:https://coreos.com/blog/introducing-vault-operator-project
 [etcd Operator]:https://coreos.com/blog/introducing-the-etcd-operator.html
 [Helm Charts/Vault-Operator]:https://github.com/helm/charts/tree/master/stable/vault-operator
+[some time]:https://github.com/coreos/vault-operator/issues/332#issue-335529485
 [learn]:https://learn.hashicorp.com/vault/getting-started/first-secret
 
 
