@@ -38,15 +38,22 @@ set -x
 ###   * etcd Operator included
 ###   * config opts: https://github.com/helm/charts/tree/master/stable/vault-operator#configuration
 ###---
-helm install stable/vault-operator  \
-    --name="$vaultRelName"          \
-    --namespace="$nameSpace"        \
-    --values='kubes/values.yaml'
+#helm install stable/vault-operator  \
+#    --name="$vaultRelName"          \
+#    --namespace="$nameSpace"        \
+#    --values='kubes/values.yaml'
 
 
 ###---
-### REQ
+### Install the Banzai Cloud Vault Operator
+###   * etcd Operator included
+###   * https://github.com/banzaicloud/banzai-charts/tree/master/vault-operator
 ###---
+helm install banzaicloud-stable/vault-operator  \
+    --name="$vaultRelName"                      \
+    --namespace="$nameSpace"                    \
+    --set etcd-operator.enabled=true
+    #--values='kubes/values.yaml'
 
 
 ###---

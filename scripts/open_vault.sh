@@ -40,8 +40,9 @@ function getToken() {
 ### MAIN PROGRAM
 ###----------------------------------------------------------------------------
 ### Initialize
+###   * NO NEED with the Bonzai Operator
 ###---
-vault operator init  2>&1 | tee "$theJelly"
+#vault operator init  2>&1 | tee "$theJelly"
 
 
 ###---

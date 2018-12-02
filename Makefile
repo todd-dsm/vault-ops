@@ -15,17 +15,17 @@ prep:  ## Prepare Kube cluster w/ Helm
 	@printf '\n%s\n\n' "  source scripts/build.env vaultRelName"
 
 
-operators: ## deploy the operators
+operators: ## deploy the operators, this takes 11s
 	scripts/inst_operators.sh
 
 
 vault:  ## install Vault via Helm 
-	scripts/inst_vault.sh 
-	kubectl --namespace=vault get vault $(vaultRelName) -o yaml
+	kubectl apply -f kubes/bonzai/cr-etcd-ha.yaml
+	kubectl --namespace=$(nameSpace) get vault -o yaml
 
 
 proxy:  ## proxy out to the cluster for the unseal
-	scripts/proxy_out.sh
+	port-forward vault-0 8200
 
 
 unseal: ## Unseal Vault
