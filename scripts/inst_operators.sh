@@ -1,76 +1,47 @@
 #!/usr/bin/env bash
-#  PURPOSE: auto-initialize and unseal vault
+# shellcheck disable=SC2154
+#  PURPOSE: Description
 # -----------------------------------------------------------------------------
-#  PREREQS: a)
-#           b)
+#  PREREQS: a) source scripts/build.env relName
+#           b) helm init --upgrade
 #           c)
 # -----------------------------------------------------------------------------
 #  EXECUTE:
 # -----------------------------------------------------------------------------
-#     TODO: 1) Fix expansion of 'example'
+#     TODO: 1)
 #           2)
 #           3)
 # -----------------------------------------------------------------------------
 #   AUTHOR: Todd E Thomas
 # -----------------------------------------------------------------------------
-#  CREATED: 2018/09/00
+#  CREATED: 2018/10/00
 # -----------------------------------------------------------------------------
 set -x
+
 
 ###----------------------------------------------------------------------------
 ### VARIABLES
 ###----------------------------------------------------------------------------
+#"${1?  Wheres my first agument, bro!}"
 # ENV Stuff
-
-# Data Files
-theJelly='/tmp/jelly.out'
 
 
 ###----------------------------------------------------------------------------
 ### FUNCTIONS
 ###----------------------------------------------------------------------------
-### Export the Root Token
-###---
-function getToken() {
-    export  ROOT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
-    export VAULT_TOKEN="$(grep 'Root' "$theJelly" | awk '{print $4}')"
-}
+
 
 ###----------------------------------------------------------------------------
 ### MAIN PROGRAM
 ###----------------------------------------------------------------------------
-### Initialize
+### Install the Vault Operator
+###   * etcd Operator included
+###   * config opts: https://github.com/helm/charts/tree/master/stable/vault-operator#configuration
 ###---
-vault operator init  2>&1 | tee "$theJelly"
-
-
-###---
-### Export the Root Token
-###---
-getToken "$theJelly"
-
-
-###---
-### Unseal
-###---
-printf '%s\n' "Unsealing the Vault..."
-while read -r unsealKey; do
-    vault operator unseal "$unsealKey"
-done <<< "$(awk '1; NR == 3 { exit }' $theJelly | cut -d' ' -f4)"
-
-
-###---
-### Export to the env
-###---
-printf '%s\n' """
-
-               *** EXPORT TO THE ENVIRONMENT ***
-
-    export  ROOT_TOKEN=$ROOT_TOKEN
-    export VAULT_TOKEN=$VAULT_TOKEN
-
-"""
-
+helm install stable/vault-operator  \
+    --name="$vaultRelName"          \
+    --namespace="$nameSpace"        \
+    --values='kubes/values.yaml'
 
 
 ###---

@@ -1,0 +1,21 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+  name: vault
+  namespace: default
+  annotations:
+    ingress.kubernetes.io/secure-backends: 'true'
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+    - hosts:
+        - vault.ingress.staging.ttest.info
+      secretName: vault-server-ingress-tls
+  rules:
+    - host: vault.ingress.staging.ttest.info
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: yo
+              servicePort: 8200

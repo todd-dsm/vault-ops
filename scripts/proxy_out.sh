@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2154
 #  PURPOSE: proxy out to kubernetes
 # -----------------------------------------------------------------------------
 #  PREREQS: a)
@@ -21,7 +22,6 @@ set -x
 ### VARIABLES
 ###----------------------------------------------------------------------------
 # ENV Stuff
-releaseName="$1"
 
 
 ###----------------------------------------------------------------------------
@@ -36,9 +36,9 @@ releaseName="$1"
 ### later, access the vault by initializing and unsealing
 ###---
 {
-    kubectl -n default get vault "$releaseName" \
+    kubectl -n "$nameSpace" get vault "$vaultRelName" \
         -o jsonpath='{.status.vaultStatus.sealed[0]}' | \
-        xargs -0 -I {} kubectl -n default port-forward {} 8200&
+        xargs -0 -I {} kubectl -n "$nameSpace" port-forward {} 8200&
 } > /dev/null
 
 

@@ -14,18 +14,38 @@ prep:  ## Prepare Kube cluster w/ Helm
 	@printf '\n\n%s\n' "SOURCE-IN YOUR ENV VARIABLES; EXAMPLE:"
 	@printf '\n%s\n\n' "  source scripts/build.env vaultRelName"
 
+
 operators: ## deploy the operators
 	scripts/inst_operators.sh
 
+
 vault:  ## install Vault via Helm 
 	scripts/inst_vault.sh 
+	kubectl --namespace=vault get vault $(vaultRelName) -o yaml
+
 
 proxy:  ## proxy out to the cluster for the unseal
-	scripts/proxy_out.sh $(vaultRelName)
+	scripts/proxy_out.sh
 
 
 unseal: ## Unseal Vault
 	scripts/open_vault.sh
+
+
+policy: ## Configure Vault - update this per-use
+	vault audit enable file file_path=stdout
+	vault auth  enable kubernetes
+	vault policy write admin_policy scripts/admin_policy.hcl
+	
+
+#tls_ingress: ## generage tls certs for ingress
+#	KUBE_NS=$(nameSpace) \
+#	SERVER_SECRET=vault-server-ingress-tls \
+#	CLIENT_SECRET=vault-client-ingress-tls \
+#	SERVER_CERT=tls.crt \
+#	SERVER_KEY=tls.key \
+#	scripts/tls-gen.sh
+#	#SAN_HOSTS="vault.ingress.staging.core-os.net" \
 
 
 ###    CHECK NODEPORT BEFORE THIS STEP
@@ -36,11 +56,11 @@ expose: ## create the NodePort to the service from the outside
 
 
 clean: ## Destroy all in order
-	@kubectl delete -f kubes/service_external.yaml
 	@helm delete --purge $(vaultRelName)
-	@helm delete --purge $(opsRelName)
+	@kubectl delete -f kubes/service_external.yaml
 	sudo lsof -i :8200 | grep IPv4 | awk '{print $2}' | \
 		xargs kill -9
+	@helm delete --purge $(opsRelName)
 
 
 #-----------------------------------------------------------------------------#

@@ -1,11 +1,17 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2154
+
+serviceFile='kubes/service_external.yaml'
+
+cat > "$serviceFile" <<EOF
 apiVersion: v1
 kind: Service
 metadata:
-  name: auth-ext
-  namespace: vault
+  name: ${vaultRelName}-ext
+  namespace: $nameSpace
   labels:
     app: vault
-    vault_cluster: auth
+    vault_cluster: $vaultRelName
 spec:
   type: NodePort
   ports:
@@ -23,5 +29,6 @@ spec:
     targetPort: 9102
   selector:
     app: vault
-    vault_cluster: auth
+    vault_cluster: $vaultRelName
   sessionAffinity: None
+EOF

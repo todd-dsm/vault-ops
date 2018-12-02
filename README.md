@@ -33,8 +33,8 @@ Subequent scripts need the variables in `scripts/build.env`. The `Makefile` will
 $ source scripts/build.env tsirung
 ++ export myRelease=tsirung
 ++ myRelease=tsirung
-++ export nameSpace=default
-++ nameSpace=default
+++ export KUBE_NS=default
+++ KUBE_NS=default
 ++ export VAULT_ADDR=https://localhost:8200
 ++ VAULT_ADDR=https://localhost:8200
 ++ export VAULT_SKIP_VERIFY=true
