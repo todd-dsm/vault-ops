@@ -53,7 +53,6 @@ helm install banzaicloud-stable/vault-operator  \
     --name="$vaultRelName"                      \
     --namespace="$nameSpace"                    \
     --set etcd-operator.enabled=true
-    #--values='kubes/values.yaml'
 
 
 ###---
