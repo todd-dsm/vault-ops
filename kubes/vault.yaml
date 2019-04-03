@@ -4,5 +4,5 @@ metadata:
   name: "auth"
   namespace: vault
 spec:
-  nodes: 2
+  nodes: 3
   version: "0.9.1-0"

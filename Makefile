@@ -9,8 +9,11 @@ nameSpace	?= $(shell $(nameSpace))
 
 
 # ensure some requirements are met
+cluster:  ## Bootstrap the GKE Cluster: 3 nodes
+
 prep:  ## Prepare Kube cluster w/ Helm
-	helm init --upgrade
+	kubectl create -f kubes/tiller-rbac.yaml
+	helm init --service-account=tiller --upgrade
 	@printf '\n\n%s\n' "SOURCE-IN YOUR ENV VARIABLES; EXAMPLE:"
 	@printf '\n%s\n\n' "  source scripts/build.env vaultRelName"
 
