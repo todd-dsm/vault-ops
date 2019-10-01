@@ -1,7 +1,7 @@
 apiVersion: "vault.security.coreos.com/v1alpha1"
 kind: "VaultService"
 metadata:
-  name: "auth"
+  name: "tsirung"
   namespace: vault
 spec:
   nodes: 3

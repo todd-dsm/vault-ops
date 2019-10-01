@@ -1,15 +1,14 @@
 # vault-ops
 
-For Vault on Google Cloud there's [vault-on-gke]. If you want to do it the hardway there's [vault-on-google-kubernetes-engine]. 
+For Vault on Google Cloud there's [vault-on-gke]. If you want to do it the hardway there's [vault-on-google-kubernetes-engine].
 
-For everything else, there's _this_ - the CoreOS [Vault Operator], backed by the [etcd Operator]. 
+For everything else, there's _this_ - the CoreOS [Vault Operator], backed by the [etcd Operator].
 
 For now, the [Helm Charts/Vault-Operator] repo will be the primary reference point for use and further instruction.
 
 ## Limitations
 
 This deployment won't go past Vault `v0.9.1-0` for [some time].
-
 
 ## The Steps
 
@@ -21,8 +20,8 @@ Everthing else is driven by the `Makefile`.
 
 Install the Helm Tiller and source in your variables as instructed:
 
-```
-$ make prep 
+```bash
+$ make prep
 helm init --upgrade
 $HELM_HOME has been configured at /Users/thomas/.helm.
 
@@ -34,7 +33,7 @@ source scripts/build.env auth           <- Instructions
 
 Subequent scripts need the variables in `scripts/build.env`. The `Makefile` will have them by the time it needs them. I called the _release_ `auth`; pass in whatever string you want.
 
-```
+```bash
 $ source scripts/build.env auth
 ++ export myRelease=auth
 ++ myRelease=auth
@@ -49,7 +48,7 @@ $ source scripts/build.env auth
 
 The tiller pod needs about 30 seconds to get going; check status before moving forward. Example:
 
-```
+```bash
 kubectl -n kube-system get pod tiller-deploy-7f4974b9c8-jz6cb 
 NAME                            READY   STATUS    RESTARTS   AGE
 tiller-deploy-7f4974b9c8-jz6cb  1/1     Running   0          1m
@@ -61,7 +60,7 @@ Deploy Vault
 
 This takes a few minutes. Confirm everything is `STATUS=Running` and wait until `vault` itself has been up for at least **2-3 _more_ minutes**; for example:
 
-```
+```bash
 NAME                            READY   STATUS    RESTARTS   AGE
 pod/auth-74759c657d-522s9    1/2     Running   2          3m
 ...
@@ -73,7 +72,8 @@ The `make unseal` fails; we'll fix this in post. If you know how, please feel fr
 
 `scripts/open_vault.sh auth`
 
-# Experimentation
+## Experimentation
+
 At this point Vault is up and running in Kubernetes and you are proxied out to the environment; [learn] and experiment. 
 
 ---
@@ -92,9 +92,7 @@ Experiment: make sure the token/unseal keys don't persist:
 
 `cat /tmp/jelly.out`
 
-
 :fist:
-
 
 [vault-on-gke]:https://github.com/sethvargo/vault-on-gke
 [vault-on-google-kubernetes-engine]:https://github.com/kelseyhightower/vault-on-google-kubernetes-engine
@@ -103,5 +101,3 @@ Experiment: make sure the token/unseal keys don't persist:
 [Helm Charts/Vault-Operator]:https://github.com/helm/charts/tree/master/stable/vault-operator
 [some time]:https://github.com/coreos/vault-operator/issues/332#issue-335529485
 [learn]:https://learn.hashicorp.com/vault/getting-started/first-secret
-
-

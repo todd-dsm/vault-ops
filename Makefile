@@ -9,7 +9,8 @@ nameSpace	?= $(shell $(nameSpace))
 
 
 # ensure some requirements are met
-cluster:  ## Bootstrap the GKE Cluster: 3 nodes
+cluster:  ## Bootstrap a 1-node cluster in minikube
+	scripts/minikube.sh
 
 prep:  ## Prepare Kube cluster w/ Helm
 	kubectl create -f kubes/tiller-rbac.yaml
